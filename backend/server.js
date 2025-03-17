@@ -1,7 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const cors = require("cors");
-
+const path = require("path");
 const app = express();
 const PORT = 5000;
 
@@ -15,6 +15,16 @@ const ASSISTANT_ID = "67d6e34dfd43d16b66f987b1";
 
 let accessToken = "";
 let tokenExpiresAt = 0;
+
+
+// 1. 托管前端打包后的 dist 文件夹
+app.use(express.static(path.join(__dirname, "dist")));
+
+// 3. 处理除 /api 以外的所有请求，返回 dist/index.html
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
+
 
 // **获取 Access Token**
 async function getAccessToken() {
